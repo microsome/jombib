@@ -1,5 +1,8 @@
+
+/*
+ * These (24 items) are standard bibtex field names except those (4) which conflict with SQL keywords. 
+ */
 DROP TABLE IF EXISTS `#__bib`;
--- These (26 items) are standard bibtex field names except those (4) which conflict with SQL keywords.
 CREATE TABLE IF NOT EXISTS `#__bib` (
    `id` int(11) NOT NULL auto_increment,
    `entrytype` enum('article', 'book', 'booklet', 'conference', 'inbook', 'incollection', 'inproceedings', 'manual', 'mastersthesis', 'misc', 'phdthesis', 'proceedings', 'techreport', 'unpublished'), -- Type of the entry, as defined in bibtex
@@ -11,7 +14,6 @@ CREATE TABLE IF NOT EXISTS `#__bib` (
    `crossref` varchar(255),	-- The key of the cross-referenced entry
    `edition` varchar(255),	-- The edition of a book, long form (such as "first" or "second")
    `editor` varchar(255),	-- The name(s) of the editor(s)
-   `eprint` varchar(255),	-- A specification of an electronic publication, often a preprint or a technical report
    `howpublished` varchar(255),	-- How it was published, if the publishing method is nonstandard
    `institution` varchar(255),	-- The institution that was involved in the publishing, but not necessarily the publisher
    `journal` varchar(255),	-- The journal or magazine the work was published in
@@ -26,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `#__bib` (
    `series` varchar(255),	-- The series of books the book was published in (e.g. "The Hardy Boys")
    `title` varchar(255),	-- The title of the work
    `bibtype` varchar(255),	-- The type of tech-report, for example, "Research Note"
-   `url` varchar(255),		-- The WWW address
    `volume` varchar(255),	-- The volume of a journal or multi-volume book
    `bibyear` year(4),		-- The year of publication (or, if unpublished, the year of creation)
    PRIMARY KEY (`id`)
