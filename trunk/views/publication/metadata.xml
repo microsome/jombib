@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf8"?>
+<metadata>
+  <view title="Single Publication">
+    <message>
+      <![CDATA[Shows individual publications.]]>
+    </message>
+  </view>
+  <params>
+    <param name="id" type="text" size="3" default="" label="Publication ID" description="Enter the ID of the publication to be displayed." />
+  </params>
+</metadata>
