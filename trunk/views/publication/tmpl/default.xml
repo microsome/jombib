@@ -5,4 +5,11 @@
       <![CDATA[This layout shows a single publication.]]>
     </message>
   </layout>
+  <state>
+    <name>Single Publication Layout</name>
+    <description><![CDATA[This layout shows a single publication.]]></description>
+    <params>
+      <param name="id" type="text" size="3" default="" label="Publication ID" description="Enter the ID of the publication to be displayed." />
+    </params>
+  </state>
 </metadata>

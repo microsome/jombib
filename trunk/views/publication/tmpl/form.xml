@@ -5,4 +5,10 @@
       <![CDATA[This layout allows user to submit a publication.]]>
     </message>
   </layout>
+  <state>
+    <name>Publication Submssion Layout</name>
+    <description><![CDATA[This layout allows user to submit a publication.]]></description>
+    <params>
+    </params>
+  </state>
 </metadata>
