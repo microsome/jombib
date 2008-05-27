@@ -67,11 +67,11 @@ class PublicationsController extends JController {
     $limitstart = JRequest::getVar('limitstart', 0); 
     
     $db =& JFactory::getDBO();
-    $query = "SELECT count(*) FROM #__bib"; 
+    $query = "SELECT count(*) FROM #__publications"; 
     $db->setQuery( $query ); 
     $total = $db->loadResult(); 
     
-    $query = "SELECT * FROM #__bib"; 
+    $query = "SELECT * FROM #__publications"; 
     $db->setQuery( $query, $limitstart, $limit ); 
     $rows = $db->loadObjectList(); 
     
@@ -97,7 +97,7 @@ class PublicationsController extends JController {
      
     if(count($cid)) { 
       $cids=implode(',',$cid);$cids = implode( ',', $cid ); 
-      $query = "DELETE FROM #__bib WHERE id IN ( $cids )"; 
+      $query = "DELETE FROM #__publications WHERE id IN ( $cids )"; 
       $db->setQuery( $query );
       if (!$db->query()) {
 	echo "<script> alert('".$db->getErrorMsg()."'); window. history.go(-1); </script>\n"; 

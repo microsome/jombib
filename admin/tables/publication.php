@@ -2,7 +2,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 class TablePublication extends JTable {
+  /* System fileds  */
   var $id = null;
+  var $entrytype = null;
+  var $published = 0;
+  var $submitted_by = null;
+  var $submitted_time = null;
+  /* Standard bibtex fileds */
   var $address = null;
   var $annote = null;
   var $author = null;
@@ -11,7 +17,6 @@ class TablePublication extends JTable {
   var $crossref = null;
   var $edition = null;
   var $editor = null;
-  var $eprint = null;
   var $howpublished = null;
   var $institution = null;
   var $journal = null;
@@ -26,12 +31,19 @@ class TablePublication extends JTable {
   var $series = null;
   var $title = null;
   var $bibtype = null;
-  var $url = null;
   var $volume = null;
   var $bibyear = null;
-
+  /* Other data fields */
+  var $abstract = null;
+  var $keywords = null;
+  var $tag1 = null;
+  var $tag2 = null;
+  var $tag3 = null;
+  var $tags = null;
+  var $url = null;
+ 
   function __construct(&$db) {
-    parent::__construct( '#__bib', 'id', $db );
+    parent::__construct( '#__publications', 'id', $db );
   }
 }
 
