@@ -8,7 +8,7 @@ class PublicationsModelAll extends JModel {
 
   function getList() {
     if(!$this->_pubs) {
-      $query = "SELECT * FROM #__bib";
+      $query = "SELECT * FROM #__publications";
       $this->_pubs = $this->_getList($query, 0, 0);
     }
     

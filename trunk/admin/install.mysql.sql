@@ -1,11 +1,12 @@
-
-/*
- * These (24 items) are standard bibtex field names except those (4) which conflict with SQL keywords. 
- */
-DROP TABLE IF EXISTS `#__bib`;
-CREATE TABLE IF NOT EXISTS `#__bib` (
+DROP TABLE IF EXISTS `#__publications`;
+CREATE TABLE IF NOT EXISTS `#__publications` (
+   /* system columns */
    `id` int(11) NOT NULL auto_increment,
    `entrytype` enum('article', 'book', 'booklet', 'conference', 'inbook', 'incollection', 'inproceedings', 'manual', 'mastersthesis', 'misc', 'phdthesis', 'proceedings', 'techreport', 'unpublished'), -- Type of the entry, as defined in bibtex
+   `published` tinyint(1) NOT NULL default '0',   -- Whether this entry should be shown in the front-end site
+   `submitted_by` int(11),    -- The user id in #__users table
+   `submitted_time` datetime NOT NULL default '0000-00-00 00:00:00',    -- The time that this entry is submitted.
+   /* bibtex columns */
    `address` varchar(255),	-- Publisher's address (usually just the city, but can be the full address for lesser-known publishers)
    `annote` varchar(255),	-- An annotation for annotated bibliography styles (not typical)
    `author` varchar(255),	-- The name(s) of the author(s) (in the case of more than one author, separated by and)
@@ -30,5 +31,20 @@ CREATE TABLE IF NOT EXISTS `#__bib` (
    `bibtype` varchar(255),	-- The type of tech-report, for example, "Research Note"
    `volume` varchar(255),	-- The volume of a journal or multi-volume book
    `bibyear` year(4),		-- The year of publication (or, if unpublished, the year of creation)
-   PRIMARY KEY (`id`)
-) TYPE=MyISAM CHARACTER SET `utf8`;
+   /* other data columns */
+   `abstract` text,      -- Abstract of the publication
+   `keywords` varchar(255), -- Keywords
+   --
+   -- Tag1-3 are the mostly used tags of the entries
+   --
+   `tag1` varchar(255),
+   `tag2` varchar(255),
+   `tag3` varchar(255),
+   `tags` varchar(255), -- Other tags, concatenated by commas
+   `url` varchar(255),  -- The WWW address of this entry
+   /* Constraints */
+   PRIMARY KEY (`id`),
+   CONSTRAINT `fk_bib_user` FOREIGN KEY (`submitted_by`)
+      REFERENCES `#__users` (`id`)
+      ON DELETE SET NULL ON UPDATE SET NULL
+) ENGINE=MyISAM CHARACTER SET `utf8`;

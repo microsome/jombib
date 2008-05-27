@@ -24,7 +24,7 @@ class PublicationsModelPublication extends JModel {
   
   function getPublication() {
     if(!$this->_pub) {
-      $query = "SELECT * FROM #__bib WHERE id = '" . $this->_id . "'";
+      $query = "SELECT * FROM #__publications WHERE id = '" . $this->_id . "'";
       $this->_db->setQuery($query);
       $this->_pub = $this->_db->loadObject();
     }
