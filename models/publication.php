@@ -5,7 +5,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 jimport( 'joomla.application.component.model' );
 
 class PublicationsModelPublication extends JModel {
-  var $_pub = null;
+  var $_data = null;
   var $_id = null;
   
   function __construct() {
@@ -23,13 +23,13 @@ class PublicationsModelPublication extends JModel {
   }
   
   function getPublication() {
-    if(!$this->_pub) {
+    if(!$this->_data) {
       $query = "SELECT * FROM #__publications WHERE id = '" . $this->_id . "'";
       $this->_db->setQuery($query);
-      $this->_pub = $this->_db->loadObject();
+      $this->_data = $this->_db->loadObject();
     }
     
-    return $this->_pub;
+    return $this->_data;
   }
 }
 

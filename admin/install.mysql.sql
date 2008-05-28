@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `#__publications`;
 CREATE TABLE IF NOT EXISTS `#__publications` (
    /* system columns */
    `id` int(11) NOT NULL auto_increment,
-   `entrytype` enum('article', 'book', 'booklet', 'conference', 'inbook', 'incollection', 'inproceedings', 'manual', 'mastersthesis', 'misc', 'phdthesis', 'proceedings', 'techreport', 'unpublished'), -- Type of the entry, as defined in bibtex
+   `entrytype` enum('article', 'book', 'booklet', 'conference', 'inbook', 'incollection', 'inproceedings', 'manual', 'mastersthesis', 'misc', 'phdthesis', 'proceedings', 'techreport', 'unpublished') NOT NULL default 'misc', -- Type of the entry, as defined in bibtex
    `published` tinyint(1) NOT NULL default '0',   -- Whether this entry should be shown in the front-end site
    `submitted_by` int(11),    -- The user id in #__users table
    `submitted_time` datetime NOT NULL default '0000-00-00 00:00:00',    -- The time that this entry is submitted.
