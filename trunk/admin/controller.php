@@ -10,7 +10,7 @@ class PublicationsController extends JController {
     //register function names that are NOT standardized.
     $this->registerTask( 'add' , 'edit' ); 
     $this->registerTask( 'apply', 'save' );
-    //$this->registerTask( 'unpublish', 'publish' );
+    $this->registerTask( 'unpublish', 'publish' );
   }
 
   function save() { 
@@ -104,6 +104,26 @@ class PublicationsController extends JController {
       } 
     }
     
+    $this->setRedirect( 'index.php?option=' . $option ); 
+  }
+
+  /**
+   * Publish/unpublish the publication
+   */
+  function publish() { 
+    global $option;
+
+    $cid = JRequest::getVar( 'cid', array(), '', 'array' ); 
+    
+    if( $this->_task == 'publish') { 
+      $publish = 1; 
+    }
+    else { 
+      $publish = 0; 
+    }
+    
+    $pubTable =& JTable::getInstance('Publication', 'Table'); 
+    $pubTable->publish($cid, $publish); 
     $this->setRedirect( 'index.php?option=' . $option ); 
   }
 }

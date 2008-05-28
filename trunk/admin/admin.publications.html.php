@@ -13,11 +13,12 @@ class HTML_publications {
         <table class="admintable">
           <tr> 
             <td width="100" align="right" class="key"> 
-              Title:</td> 
+              Title:
+            </td> 
             <td> 
               <input class="text_area" type="text" name="title" 
                   id="name" size="50" maxlength="250" 
-                  value="<?php echo $row->title;?>" /> 
+                  value="<?php echo $row->title;?>" />
             </td>
           </tr>
         </table>
@@ -39,7 +40,11 @@ class HTML_publications {
               <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $rows ); ?>);" />
             </th>
             <th class="title">Title</th>
-          </tr> 
+            <th width="5%">Entry Type</th>
+            <th width="35%">Authors</th>
+            <th width="5%">Published</th>
+            <th width="5%" nowrap="nowrap">ID</th>
+          </tr>
         </thead>
         <?php
         jimport('joomla.filter.output');
@@ -47,7 +52,8 @@ class HTML_publications {
         for ($i=0, $n=count( $rows ); $i < $n; $i++) {
           $row = &$rows[$i]; 
           $checked = JHTML::_('grid.id', $i, $row->id );
-          //$published = JHTML::_('grid.published', $row, $i );
+          //grid.published is hard-coded to use publish/unpublish tasks.
+          $published = JHTML::_('grid.published', $row, $i );
           $link = JFilterOutput::ampReplace( 'index.php?option=' . $option . '&task=edit&cid[]='. $row->id );
           ?>
           <tr class="<?php echo "row$k"; ?>">
@@ -59,7 +65,19 @@ class HTML_publications {
                 <?php echo $row->title; ?>
               </a>
             </td>
-          </tr> 
+            <td>
+              <?php echo $row->entrytype; ?>
+            </td>
+            <td>
+              <?php echo $row->author; ?>
+            </td>
+            <td align="center"> 
+              <?php echo $published;?> 
+            </td> 
+            <td>
+              <?php echo $row->id; ?>
+            </td>
+          </tr>
           <?php 
             $k = 1 - $k; 
         }
@@ -73,7 +91,7 @@ class HTML_publications {
       <input type="hidden" name="boxchecked" value="0" /> 
     </form> 
     <?php
-  } 
+  }
 }
 
 ?>
