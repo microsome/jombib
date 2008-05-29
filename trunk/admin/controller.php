@@ -7,7 +7,8 @@ class PublicationsController extends JController {
   
   function __construct( $default = array() ) { 
     parent::__construct( $default );
-    //register function names that are NOT standardized.
+    // Register function names that are different from task names.
+    // the default task is 'display'
     $this->registerTask( 'add' , 'edit' ); 
     $this->registerTask( 'apply', 'save' );
     $this->registerTask( 'unpublish', 'publish' );
@@ -48,43 +49,9 @@ class PublicationsController extends JController {
    * Shared by add and edit
    */
   function edit() {
-    global $option; 
-
-    $row =& JTable::getInstance('Publication', 'Table');
-    //cid: row id
-    $cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-    $id = $cid[0]; 
-    $row->load($id); 
-    $lists = array();
-
-    HTML_publications::editPublication($row, $lists, $option); 
-  }
-
-  function showPublications() { 
-    global $option, $mainframe;
-    
-    $limit = JRequest::getVar('limit', $mainframe->getCfg('list_limit')); 
-    $limitstart = JRequest::getVar('limitstart', 0); 
-    
-    $db =& JFactory::getDBO();
-    $query = "SELECT count(*) FROM #__publications"; 
-    $db->setQuery( $query ); 
-    $total = $db->loadResult(); 
-    
-    $query = "SELECT * FROM #__publications"; 
-    $db->setQuery( $query, $limitstart, $limit ); 
-    $rows = $db->loadObjectList(); 
-    
-    if ($db->getErrorNum()) { 
-      echo $db->stderr(); 
-      return false; 
-    } 
-    
-    jimport('joomla.html.pagination'); 
-    
-    $pageNav = new JPagination($total, $limitstart, $limit); 
-    
-    HTML_publications::showPublications( $option, $rows, $pageNav );
+    JRequest::setVar( 'layout', 'form' );
+    JRequest::setVar( 'view', 'publication' );
+    parent::display(); 
   }
 
   /**
