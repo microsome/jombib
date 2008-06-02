@@ -5,11 +5,12 @@
         <th width="20">
           <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->items ); ?>);" />
         </th>
-        <th class="title">Title1</th>
+        <th class="title">Title</th>
         <th width="5%">Entry Type</th>
-        <th width="35%">Authors</th>
+        <th width="30%">Authors</th>
         <th width="5%">Published</th>
         <th width="5%" nowrap="nowrap">ID</th>
+        <th width="5%">Main Tag</th>
       </tr>
     </thead>
     <?php
@@ -32,16 +33,19 @@
           </a>
         </td>
         <td>
-              <?php echo $row->entrytype; ?>
+          <?php echo $row->entrytype; ?>
         </td>
         <td>
-            <?php echo $row->author; ?>
+          <?php echo $row->author; ?>
         </td>
         <td align="center"> 
-            <?php echo $published;?> 
+          <?php echo $published;?> 
         </td> 
         <td>
-            <?php echo $row->id; ?>
+          <?php echo $row->id; ?>
+        </td>
+        <td>
+          <?php echo $row->tag1; ?>
         </td>
       </tr>
       <?php 
