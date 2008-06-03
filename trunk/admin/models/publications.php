@@ -51,8 +51,21 @@ class PublicationsModelPublications extends JModel {
   }
 
   function _buildQuery() {
-    $query = "SELECT * FROM #__publications";
+    $orderby= $this->_buildContentOrderBy();
+    $query = "SELECT * FROM #__publications"
+      . $orderby;
     return $query;
+  }
+
+  function _buildContentOrderBy() {
+    global $mainframe, $option;
+
+    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title','cmd' );
+    $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
+
+    $orderby = ' ORDER BY '.$filter_order.' '.$filter_order_Dir.' ';
+
+    return $orderby;
   }
 }
 

@@ -5,7 +5,7 @@ function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
   }
 ?>
   <tr id="<?php echo $fieldName; ?>row">
-    <td align="right" class="key">
+    <td align="right" class="key" nowrap="nowrap">
       <label for="<?php echo $fieldName; ?>">
         <?php echo $fieldLabel; ?>:
       </label>
@@ -43,9 +43,9 @@ function makeTextarea($fieldName, $field) {
 <div class="col width-70">
   <fieldset class="adminform">
     <legend>Details</legend>
-    <table class="admintable" id="entrytable">
+    <table class="admintable" id="entrytable" width="100%">
       <tr id="entrytyperow">
-        <td align="right" class="key">
+        <td align="right" class="key" nowrap>
           <label for="entrytype">Entry Type:</label>
         </td>
         <td>
@@ -122,20 +122,23 @@ function makeTextarea($fieldName, $field) {
     <legend>System Fileds</legend>
     <table id="sysfieldtable" class="admintable">
       <?php createFieldRow('published',$this->row->published, $this->lists['published']); ?>
-      <tr>
-        <td class="key">
-          <label>ID:</label>
-        </td>
-        <td>
-          <?php echo $this->row->id;  ?>
-        </td>
-      </tr>
+      <?php createFieldRow('id', null, $this->row->id, 'ID'); ?>
+      <?php createFieldRow('submitted_by', null, $this->lists['submitted_by'], 'Submitted By'); ?>
+      <?php createFieldRow('submitted_time', null, JHTML::_('date',$this->row->submitted_time, '%Y-%m-%d %H:%M:%S, %Z'), 'Submitted Time'); ?>
     </table>
   </fieldset>
 </div>
 
   <input type="hidden" name="id" value="<?php echo $this->row->id; ?>" />
   <input type="hidden" name="option" value="<?php echo $option;?>" />
+  <?php
+  if($this->row->id < 1) {
+    //new
+    ?>
+    <input type="hidden" name="submitted_by" value="<?php echo $this->user->id;?>" />
+    <?php
+  }
+  ?>
   <input type="hidden" name="task" value="" />
 </form>
 
@@ -213,6 +216,8 @@ var nonBibtexFields = {
 document.body.onload = load();
 
 function load() {
+  var entrytypeSelect = document.getElementById('entrytype');
+  entrytypeSelect.selectedIndex = 1;
   entrytypeChanged();
   changeNonBibtexFieldsDisplay();
 }
@@ -285,6 +290,23 @@ function changeAllBibtexFieldsDisplay() {
   } else {
     entrytypeChanged();
   }
+}
+
+function submitbutton(pressbutton) {
+  var form = document.adminForm;
+  var submittedBy = <?php echo $this->user->id;  ?>;
+  var pubId = <?php echo intval($this->row->id);  ?>;
+  var submittedTime = new Date();
+  if (pressbutton == 'cancel') {
+    submitform( pressbutton );
+    return;
+  }
+
+  if(pubId < 1) {
+    //new
+  } else {
+  }
+  submitform( pressbutton );
 }
 
 </script>
