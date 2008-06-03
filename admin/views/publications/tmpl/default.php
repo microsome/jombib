@@ -2,15 +2,27 @@
   <table class="adminlist"> 
     <thead> 
       <tr> 
-        <th width="20">
+        <th width="20" nowrap>
           <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->items ); ?>);" />
         </th>
-        <th class="title">Title</th>
-        <th width="5%">Entry Type</th>
-        <th width="30%">Authors</th>
-        <th width="5%">Published</th>
-        <th width="5%" nowrap="nowrap">ID</th>
-        <th width="5%">Main Tag</th>
+        <th class="title" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Title', 'title', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+        <th width="5%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Entry Type', 'entrytype', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+        <th width="30%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Authors', 'author', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+        <th width="5%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Published', 'published', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+        <th width="5%" nowrap="nowrap">
+          <?php echo JHTML::_('grid.sort',  'ID', 'id', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+        <th width="5%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Main Tag', 'tag1', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
       </tr>
     </thead>
     <?php
@@ -59,4 +71,6 @@
   <input type="hidden" name="option" value="<?php echo $option;?>" /> 
   <input type="hidden" name="task" value="" /> 
   <input type="hidden" name="boxchecked" value="0" /> 
+  <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
+  <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
 </form> 

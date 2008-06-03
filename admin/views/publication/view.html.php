@@ -28,6 +28,12 @@ class PublicationsViewPublication extends JView {
         array ('value'=>'', 'text'=>'-- Select Year  --'), '', $pub->bibyear);
     $lists['published'] = JHTML::_('select.booleanlist', 'published', 'class="inputbox"', 
         $pub->published);
+    if(intval($pub->submitted_by) > 0) {
+      //not new
+      $submittedBy =& JUser::getInstance($pub->submitted_by);
+    }
+    $lists['submitted_by'] = $submittedBy->name;
+    $this->assignRef('user', JFactory::getUser());
     $this->assignRef('lists',$lists);
     $this->assignRef('row', $pub);
     parent::display($tpl);

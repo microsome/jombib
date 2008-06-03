@@ -3,10 +3,10 @@ defined('_JEXEC') or die('Restricted access');
 
 class TablePublication extends JTable {
   /* System fileds  */
-  var $id = null;
+  var $id = 0;
   var $entrytype = null;
   var $published = 0;
-  var $submitted_by = null;
+  var $submitted_by = 0;
   var $submitted_time = null;
   /* Standard bibtex fileds */
   var $address = null;
@@ -21,7 +21,7 @@ class TablePublication extends JTable {
   var $institution = null;
   var $journal = null;
   var $bibkey = null;
-  var $bibmonth = null;
+  var $bibmonth = 0;
   var $note = null;
   var $bibnumber = null;
   var $organization = null;
@@ -32,7 +32,7 @@ class TablePublication extends JTable {
   var $title = null;
   var $bibtype = null;
   var $volume = null;
-  var $bibyear = null;
+  var $bibyear = 0;
   /* Other data fields */
   var $abstract = null;
   var $keywords = null;
