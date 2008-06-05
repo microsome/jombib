@@ -51,6 +51,26 @@ class PublicationsModelPublication extends JModel {
     }
     return true;
   }
+  
+  function store($data) {
+    $row =& $this->getTable();
+
+    if (!$row->bind($data)) {
+      echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n";
+      exit();
+    }
+
+    if(intval($row->id) < 1) {
+      //new
+      $datenow =& JFactory::getDate();
+      $row->submitted_time = $datenow->toMySQL();
+    }
+
+    if (!$row->store()) {
+      echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n";
+      exit();
+    }
+  }
 }
 
 ?>

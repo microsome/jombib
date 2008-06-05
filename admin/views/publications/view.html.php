@@ -7,10 +7,10 @@ class PublicationsViewPublications extends JView {
 
   function display($tpl = null) {
     global $mainframe, $option;
-    
+
     $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title','cmd' );
     $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
-    
+    $uri = &JFactory::getURI();
     // Get data from the model
     $items= & $this->get( 'Data');
     $total= & $this->get( 'Total');
@@ -29,7 +29,7 @@ class PublicationsViewPublications extends JView {
     $this->assignRef('lists',$lists);
     $this->assignRef('items',$items);
     $this->assignRef('pagination',$pagination);
-
+    $this->assign('action',$uri->toString());
     parent::display($tpl);
   }
 
