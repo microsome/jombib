@@ -9,7 +9,9 @@ JTable::addIncludePath(JPATH_COMPONENT.DS.'tables');
 require_once( JPATH_COMPONENT.DS.'controller.php' ); 
 
 $controller = new PublicationsController(); 
-//echo JRequest::getURI();
+if($mainframe->getCfg('debug')) {
+  echo JRequest::getURI();
+}
 $controller->execute( JRequest::getVar( 'task' ) ); 
 $controller->redirect();
 ?>

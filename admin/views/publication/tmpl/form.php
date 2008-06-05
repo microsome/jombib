@@ -5,7 +5,7 @@ function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
   }
 ?>
   <tr id="<?php echo $fieldName; ?>row">
-    <td align="right" class="key" nowrap="nowrap">
+    <td align="right" class="key" nowrap="nowrap" width="140px">
       <label for="<?php echo $fieldName; ?>">
         <?php echo $fieldLabel; ?>:
       </label>
@@ -45,7 +45,7 @@ function makeTextarea($fieldName, $field) {
     <legend>Details</legend>
     <table class="admintable" id="entrytable" width="100%">
       <tr id="entrytyperow">
-        <td align="right" class="key" nowrap>
+        <td align="right" class="key" nowrap width="140px">
           <label for="entrytype">Entry Type:</label>
         </td>
         <td>

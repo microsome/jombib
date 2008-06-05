@@ -20,7 +20,7 @@ class PublicationsController extends JController {
   function display() {
     // Set a default view if none exists
     if(! JRequest::getCmd('view')) {
-    JRequest::setVar('view', 'publications' );
+      JRequest::setVar('view', 'publications' );
     }
     parent::display();
   }
