@@ -129,6 +129,17 @@ function makeTextarea($fieldName, $field) {
   </fieldset>
 </div>
 
+<?php
+if($mainframe->isSite()) {
+?>
+  <div>
+    <button onclick="submitbutton('save')" type="button">Save</button>
+    <button onclick="submitbutton('cancel')" type="button">Cancel</button>
+  </div>
+<?php
+}
+?>
+
   <input type="hidden" name="id" value="<?php echo $this->row->id; ?>" />
   <input type="hidden" name="option" value="<?php echo $option;?>" />
   <?php
@@ -140,6 +151,7 @@ function makeTextarea($fieldName, $field) {
   }
   ?>
   <input type="hidden" name="task" value="" />
+  <input type="hidden" name="view" value="" />
 </form>
 
 <script language="javascript" type="text/javascript">
@@ -298,6 +310,8 @@ function submitbutton(pressbutton) {
   var pubId = <?php echo intval($this->row->id);  ?>;
   var submittedTime = new Date();
   if (pressbutton == 'cancel') {
+    //added for frontend
+    form.view = "publications";
     submitform( pressbutton );
     return;
   }

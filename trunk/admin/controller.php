@@ -14,33 +14,37 @@ class PublicationsController extends JController {
     $this->registerTask( 'unpublish', 'publish' );
   }
 
+  /**
+   * Displays the list of publications
+   */
+  function display() {
+    // Set a default view if none exists
+    if(! JRequest::getCmd('view')) {
+    JRequest::setVar('view', 'publications' );
+    }
+    parent::display();
+  }
+
   function save() { 
     global $option; 
 
-    $row =& JTable::getInstance('Publication', 'Table');
-    
-    if (!$row->bind(JRequest::get('post'))) { 
-      echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n"; 
-      exit(); 
-    }
-    
-    if(intval($row->id) < 1) {
-      //new
-      $datenow =& JFactory::getDate();
-      $row->submitted_time = $datenow->toMySQL();
+    $user=& JFactory::getUser();
+
+    // Must be logged in
+    if ($user->get('id') < 1) {
+      JError::raiseError( 403, JText::_('ALERTNOTAUTH') );
+      return;
     }
 
-    if (!$row->store()) { 
-      echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n"; 
-      exit(); 
-    }
-    
+    $post = JRequest::get('post');
+    $model = $this->getModel('Publication');
+    $model->store($post);
+
     switch ($this->_task) {
     case 'apply': 
       $msg = 'Changes to Publication saved'; 
       $link = 'index.php?option=' . $option . '&task=edit&cid[]='. $row->id; 
       break;
-	
     case 'save': 
     default: 
       $msg = 'Publication Saved'; 
@@ -52,9 +56,17 @@ class PublicationsController extends JController {
   }
 
   /**
-   * Shared by add and edit
+   * Shared by add and edit. Only available for logged-in users.
    */
   function edit() {
+    $user=& JFactory::getUser();
+
+    // Must be logged in
+    if ($user->get('id') < 1) {
+      JError::raiseError( 403, JText::_('ALERTNOTAUTH') );
+      return;
+    }
+    
     JRequest::setVar( 'layout', 'form' );
     JRequest::setVar( 'view', 'publication' );
     parent::display(); 
@@ -65,6 +77,15 @@ class PublicationsController extends JController {
    */
   function remove() { 
     global $option; 
+
+    $user=& JFactory::getUser();
+
+    // Must be logged in
+    if ($user->get('id') < 1) {
+      JError::raiseError( 403, JText::_('ALERTNOTAUTH') );
+      return;
+    }    
+
     $cid = JRequest::getVar( 'cid', array(), '', 'array' ); 
     $db =& JFactory::getDBO();
      
@@ -73,8 +94,8 @@ class PublicationsController extends JController {
       $query = "DELETE FROM #__publications WHERE id IN ( $cids )"; 
       $db->setQuery( $query );
       if (!$db->query()) {
-	echo "<script> alert('".$db->getErrorMsg()."'); window. history.go(-1); </script>\n"; 
-      } 
+        echo "<script> alert('".$db->getErrorMsg()."'); window. history.go(-1); </script>\n"; 
+      }
     }
     
     $this->setRedirect( 'index.php?option=' . $option ); 
@@ -85,6 +106,14 @@ class PublicationsController extends JController {
    */
   function publish() { 
     global $option;
+
+    $user=& JFactory::getUser();
+
+    // Must be logged in
+    if ($user->get('id') < 1) {
+      JError::raiseError( 403, JText::_('ALERTNOTAUTH') );
+      return;
+    }
 
     $cid = JRequest::getVar( 'cid', array(), '', 'array' ); 
     

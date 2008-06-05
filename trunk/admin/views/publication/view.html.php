@@ -10,12 +10,47 @@ class PublicationsViewPublication extends JView {
 
     if($this->getLayout() == 'form') {
       $this->_displayForm($tpl);
-      return;
+    } else {
+      $this->_displayDefault($tpl);
     }
+  }
+
+  function _displayDefault($tpl) {
+    global $mainframe;
     
+    $user=& JFactory::getUser();
+    $pathway =& $mainframe->getPathway();
+    $document =& JFactory::getDocument();
+    $model =& $this->getModel();
+
+    // Get the parameters of the active menu item
+    $menus=& JSite::getMenu();
+    $menu =& $menus->getActive();
+    
+    $pub =& $this->get('Data');
+
+    $pathway->addItem($pub->title, '');
+
+    if(intval($pub->submitted_by) > 0) {
+      //not new
+      $submittedBy =& JUser::getInstance($pub->submitted_by);
+    }    
+    $lists = array();
+    $lists['submitted_by'] = $submittedBy->name;
+    $this->assignRef('lists',$lists);
+    $this->assignRef('publication', $pub);
+    parent::display($tpl);
   }
 
   function _displayForm($tpl) {
+
+    $user=& JFactory::getUser();
+    // Make sure you are logged in.
+    if ($user->get('id') < 1) {
+      JError::raiseError( 403, JText::_('ALERTNOTAUTH') );
+      return;
+    }
+
     $pub =& $this->get('Data');
     $lists = array();
     
@@ -33,9 +68,11 @@ class PublicationsViewPublication extends JView {
       $submittedBy =& JUser::getInstance($pub->submitted_by);
     }
     $lists['submitted_by'] = $submittedBy->name;
+    $uri = &JFactory::getURI();
     $this->assignRef('user', JFactory::getUser());
     $this->assignRef('lists',$lists);
     $this->assignRef('row', $pub);
+    $this->assign('action',$uri->toString());
     parent::display($tpl);
   }
 
