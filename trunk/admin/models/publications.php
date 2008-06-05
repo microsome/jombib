@@ -14,8 +14,18 @@ class PublicationsModelPublications extends JModel {
     parent::__construct();
 
     global $mainframe, $option;
-    $limit = JRequest::getVar('limit', $mainframe->getCfg('list_limit'));
+    /* This doesn't work for front-end but works for backend.
+    $limit= JRequest::getVar('limit', $mainframe->getCfg('list_limit'),'', 'int');
     $limitstart = JRequest::getVar('limitstart', 0);
+    */
+    
+    // Get the pagination request variables
+    $limit= $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
+    $limitstart= $mainframe->getUserStateFromRequest( $option.'.limitstart', 'limitstart', 0, 'int' );
+
+    // In case limit has been changed, adjust limitstart accordingly
+    $limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
+
     $this->setState('limit', $limit);
     $this->setState('limitstart', $limitstart);
   }
@@ -52,7 +62,9 @@ class PublicationsModelPublications extends JModel {
 
   function _buildQuery() {
     $orderby= $this->_buildContentOrderBy();
+    $where= $this->_buildContentWhere();
     $query = "SELECT * FROM #__publications"
+      . $where
       . $orderby;
     return $query;
   }
@@ -66,6 +78,54 @@ class PublicationsModelPublications extends JModel {
     $orderby = ' ORDER BY '.$filter_order.' '.$filter_order_Dir.' ';
 
     return $orderby;
+  }
+
+  function _buildContentWhere() {
+    global $mainframe, $option;
+    $db=& JFactory::getDBO();
+    $filter_state= $mainframe->getUserStateFromRequest( $option.'filter_state','filter_state','','word' );
+    $filter_tag1= $mainframe->getUserStateFromRequest( $option.'filter_tag1','filter_tag1','');
+    $where = array();
+    if($filter_tag1) {
+      $where[] = 'tag1 = '. $db->Quote($db->getEscaped($filter_tag1, true), false);
+    }
+    
+    //only show published items on front-end.
+    if($mainframe->isSite()) {
+      $filter_state = 'P';
+    }
+    
+    if ( $filter_state ) {
+      if ( $filter_state == 'P' ) {
+        $where[] = 'published = 1';
+      } else if ($filter_state == 'U' ) {
+        $where[] = 'published = 0';
+      }
+    }
+    
+    $where = ( count( $where ) ? ' WHERE '. implode( ' AND ', $where ) : '' );
+    return $where;
+  }
+
+  function getTag1($onlyPublished = false) {
+    $db =& JFactory::getDBO();
+
+    $query = 'SELECT DISTINCT tag1 as value, tag1 as text'
+      . ' FROM #__publications'
+      . ' WHERE tag1 IS NOT NULL AND tag1 <> ""'
+      . ($onlyPublished ? ' AND published = 1' : '')
+      . ' ORDER BY tag1'
+      ;
+    $db->setQuery( $query );
+    // Let the first option to be a information option w/o value.
+    $sel_tag = 1;
+    if ( $sel_tag ) {
+      $tags[] = JHTML::_('select.option',  '', '- '. JText::_( 'Select a Tag' ) .' -' );
+      $tags = array_merge( $tags, $db->loadObjectList() );
+    } else {
+      $tags = $db->loadObjectList();
+    }
+    return $tags;
   }
 }
 

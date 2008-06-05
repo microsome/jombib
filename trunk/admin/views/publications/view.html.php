@@ -8,8 +8,11 @@ class PublicationsViewPublications extends JView {
   function display($tpl = null) {
     global $mainframe, $option;
 
-    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title','cmd' );
+    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title');
     $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
+    $filter_state= $mainframe->getUserStateFromRequest( $option.'filter_state','filter_state','','word' );
+    $filter_tag1= $mainframe->getUserStateFromRequest( $option.'filter_tag1','filter_tag1','');
+
     $uri = &JFactory::getURI();
     // Get data from the model
     $items= & $this->get( 'Data');
@@ -19,6 +22,13 @@ class PublicationsViewPublications extends JView {
     // table ordering
     $lists['order_Dir'] = $filter_order_Dir;
     $lists['order'] = $filter_order;
+    // state filter
+    $lists['state']= JHTML::_('grid.state',  $filter_state );
+    // build list of tags
+    $javascript = 'onchange="document.adminForm.submit();"';
+    $lists['f_tag1'] = JHTML::_('select.genericlist', $this->getModel()->getTag1($mainframe->isSite() ? true : false),
+                              'filter_tag1', 'class="inputbox" '. $javascript,
+                              'value', 'text', $filter_tag1 );
 
     for($i = 0; $i < count($items); $i++) {
       $row =& $items[$i];
