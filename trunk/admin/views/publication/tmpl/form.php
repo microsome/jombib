@@ -1,3 +1,7 @@
+<?php defined('_JEXEC') or die('Restricted access'); ?>
+
+<?php JHTML::_('behavior.tooltip'); ?>
+
 <?php
 function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
   if(empty($fieldLabel)) {
@@ -7,7 +11,9 @@ function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
   <tr id="<?php echo $fieldName; ?>row">
     <td align="right" class="key" nowrap="nowrap" width="140px">
       <label for="<?php echo $fieldName; ?>">
-        <?php echo $fieldLabel; ?>:
+        <span class="editlinktip hasTip" title="<?php echo JText::_(getFieldDescriptionKey($fieldName));?>">
+          <?php echo $fieldLabel; ?>:
+        </span>
       </label>
     </td>
     <td width="100%">
@@ -22,6 +28,17 @@ function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
     -->
   </tr>
   <?php
+}
+
+function getFieldDescriptionKey($fieldName) {
+  $key;
+  if(substr($fieldName, 0, 3) == 'bib') {
+    $key = substr($fieldName, 3);
+  } else {
+    $key = $fieldName;
+  }
+  $key = 'BIB_' . $key . '_DESC';
+  return $key;
 }
 
 function makeTextInput($fieldName, $field) {
