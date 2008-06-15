@@ -12,8 +12,16 @@ class PublicationsViewPublications extends JView {
     $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
     $filter_state= $mainframe->getUserStateFromRequest( $option.'filter_state','filter_state','','word' );
     $filter_tag1= $mainframe->getUserStateFromRequest( $option.'filter_tag1','filter_tag1','');
-
     $uri = &JFactory::getURI();
+
+    // Get the page/component configuration
+    if($mainframe->isSite()) {
+      $params = &$mainframe->getParams();
+      $filter_from_menu_params = $params->get('menu_pub_filter', 0);
+      $mainframe->setUserState('menu_pub_filter', $filter_from_menu_params);
+    } else {
+    }
+
     // Get data from the model
     $items= & $this->get( 'Data');
     $total= & $this->get( 'Total');
@@ -36,6 +44,7 @@ class PublicationsViewPublications extends JView {
       $row->link = JRoute::_('index.php?option=' . $option . '&id=' . $row->id  . '&view=publication');
     }
 
+    $this->assignRef('params',$params);
     $this->assignRef('lists',$lists);
     $this->assignRef('items',$items);
     $this->assignRef('pagination',$pagination);

@@ -75,7 +75,12 @@ class PublicationsModelPublications extends JModel {
     $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title','cmd' );
     $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
 
-    $orderby = ' ORDER BY '.$filter_order.' '.$filter_order_Dir.' ';
+    //take special care to journalbooktile filter
+    if($filter_order == 'journalbooktile'){
+      $orderby = ' ORDER BY journal, booktitle' .' '.$filter_order_Dir.' ';
+    } else {
+      $orderby = ' ORDER BY '.$filter_order.' '.$filter_order_Dir.' ';
+    }
 
     return $orderby;
   }
@@ -85,14 +90,23 @@ class PublicationsModelPublications extends JModel {
     $db=& JFactory::getDBO();
     $filter_state= $mainframe->getUserStateFromRequest( $option.'filter_state','filter_state','','word' );
     $filter_tag1= $mainframe->getUserStateFromRequest( $option.'filter_tag1','filter_tag1','');
+
     $where = array();
     if($filter_tag1) {
       $where[] = 'tag1 = '. $db->Quote($db->getEscaped($filter_tag1, true), false);
     }
-    
-    //only show published items on front-end.
+
+    // Add filters only for front site view
     if($mainframe->isSite()) {
+      // only show published items on front-end.
       $filter_state = 'P';
+      // This param comes from the menu params and was set in view.html.php
+      $menu_filter = $mainframe->getUserState('menu_pub_filter');
+      if(intval($menu_filter) == 1) {
+        // Show only the publications submitted by the current user.
+        $user =& JFactory::getUser();
+        $where[] = 'submitted_by = ' . $user->id;
+      }
     }
     
     if ( $filter_state ) {
