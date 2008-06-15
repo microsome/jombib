@@ -59,7 +59,7 @@ class PublicationsViewPublication extends JView {
         'value', 'text', $pub->entrytype );
     $lists['bibmonth'] = $this->integerlist(1, 12, 1, 'bibmonth', 
         array ('value'=>'', 'text'=> '-- Select Month  --'), '',  $pub->bibmonth);
-    $lists['bibyear'] = $this->integerlist(1990, date('Y'), 1, 'bibyear', 
+    $lists['bibyear'] = $this->integerlist(date('Y') - 3, date('Y') + 2, 1, 'bibyear',
         array ('value'=>'', 'text'=>'-- Select Year  --'), '', $pub->bibyear);
     $lists['published'] = JHTML::_('select.booleanlist', 'published', 'class="inputbox"', 
         $pub->published);

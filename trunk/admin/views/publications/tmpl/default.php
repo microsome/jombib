@@ -1,4 +1,7 @@
 <?php
+
+defined( '_JEXEC' ) or die( 'Restricted access' );
+
 if($mainframe->isSite()) {
 ?>
   <script language="javascript" type="text/javascript">
@@ -45,12 +48,27 @@ if($mainframe->isSite()) {
         <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th class="title"'?> nowrap>
           <?php echo JHTML::_('grid.sort',  'Title', 'title', $this->lists['order_Dir'], $this->lists['order'] ); ?>
         </th>
-        <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="5%" nowrap>
-          <?php echo JHTML::_('grid.sort',  'Entry Type', 'entrytype', $this->lists['order_Dir'], $this->lists['order'] ); ?>
-        </th>
-        <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="30%" nowrap>
+        <?php
+        // Show entrytype column on admin site at all times and on frontend if the menu param is set.
+          if($mainframe->isAdmin() || $this->params->get('show_entrytype_col', 0) == 1) :
+        ?>
+          <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="5%" nowrap>
+            <?php echo JHTML::_('grid.sort',  'Entry Type', 'entrytype', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+          </th>
+        <?php endif; ?>
+
+        <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="25%" nowrap>
           <?php echo JHTML::_('grid.sort',  'Authors', 'author', $this->lists['order_Dir'], $this->lists['order'] ); ?>
         </th>
+        <!-- Note that this column shows 2 fields. And the sorting will affect 2 fileds. (journal and booktitle) -->
+        <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="10%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Journal/Booktitle.', 'journalbooktile', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+
+        <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="5%" nowrap>
+          <?php echo JHTML::_('grid.sort',  'Year', 'year', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+        </th>
+
         <? if($mainframe->isAdmin()) { ?>
         <th width="5%" nowrap>
           <?php echo JHTML::_('grid.sort',  'Published', 'published', $this->lists['order_Dir'], $this->lists['order'] ); ?>
@@ -74,7 +92,7 @@ if($mainframe->isSite()) {
       $checked = JHTML::_('grid.id', $i, $row->id );
       //grid.published is hard-coded to use publish/unpublish tasks.
       $published = JHTML::_('grid.published', $row, $i );
-      if($mainframe->isAdmin()) {
+      if($mainframe->isAdmin() || $this->params->get('menu_pub_filter', 0) == 1) {
         $link = JFilterOutput::ampReplace( 'index.php?option=' . $option . '&task=edit&cid[]='. $row->id );
       } else {
         $link = JFilterOutput::ampReplace( 'index.php?option=' . $option . '&view=publication&cid[]='. $row->id );
@@ -91,11 +109,29 @@ if($mainframe->isSite()) {
             <?php echo $row->title; ?>
           </a>
         </td>
-        <td>
-          <?php echo $row->entrytype; ?>
-        </td>
+        <?php
+          // Show entrytype column on admin site at all times and on frontend if the menu param is set.
+          if($mainframe->isAdmin() || $this->params->get('show_entrytype_col', 0) == 1) :
+        ?>
+          <td>
+            <?php echo $row->entrytype; ?>
+          </td>
+        <?php endif; ?>
         <td>
           <?php echo $row->author; ?>
+        </td>
+        <td>
+          <?php
+          //This column shows either journal or booktitle field
+          if(!empty($row->journal)) {
+            echo $row->journal;
+          } else {
+            echo $row->booktitle;
+          }
+          ?>
+        </td>
+        <td>
+          <?php echo $row->year; ?>
         </td>
         <?php if($mainframe->isAdmin()) {?>
         <td align="center"> 

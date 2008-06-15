@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="Publications Layout">
+    <message>
+      <![CDATA[This layout shows a table of publications. ]]>
+    </message>
+  </layout>
+  <params>
+    <param name="show_entrytype_col" type="radio" default="0" label="Description" description="Show/Hide Entrytype Column">
+      <option value="0">Hide</option>
+      <option value="1">Show</option>
+    </param>
+    <param name="menu_pub_filter" type="list" default="0" label="Record Filter" description="What records to show">
+      <option value="0">All</option>
+      <option value="1">User</option>
+      <option value="2">Customized</option>
+    </param>
+  </params>
+</metadata>
