@@ -21,7 +21,7 @@ class TablePublication extends JTable {
   var $institution = null;
   var $journal = null;
   var $bibkey = null;
-  var $bibmonth = 0;
+  var $bibmonth = null;
   var $note = null;
   var $bibnumber = null;
   var $organization = null;
