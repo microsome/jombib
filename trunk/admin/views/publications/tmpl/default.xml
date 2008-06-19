@@ -15,5 +15,11 @@
       <option value="1">User</option>
       <option value="2">Customized</option>
     </param>
+    <param name="menu_pub_filter_all_description" type="textarea" default="A list of all publications."
+           label="Description of All Option" description="This text is shown above the publication table when you choose filter: All"
+           rows="3" cols="20" />
+    <param name="menu_pub_filter_user_description" type="textarea" default="A list of publications that you have submitted."
+           label="Description of User Option" description="This text is shown above the publication table when you choose filter: User"
+           rows="3" cols="20" />
   </params>
 </metadata>

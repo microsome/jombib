@@ -15,6 +15,7 @@ class TOOLBAR_publications {
     JToolBarHelper::editList();
     JToolBarHelper::deleteList();
     JToolBarHelper::addNew();
+    JToolBarHelper::preferences( 'com_publications' );
   }
 }
 

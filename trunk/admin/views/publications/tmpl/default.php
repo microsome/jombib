@@ -15,6 +15,25 @@ if($mainframe->isSite()) {
 <?php
 }
 ?>
+
+<?php if($mainframe->isSite()) {
+  // Show the content description only to frontend site.
+?>
+  <table width="100%" cellpadding="4" cellspacing="0" border="0" align="center" class="contentpane">
+    <tr>
+      <td valign="top" class="contentdescription">
+      <?php
+        if ($this->params->get('menu_pub_filter') == 0)
+          echo $this->params->get('menu_pub_filter_all_description');
+        elseif($this->params->get('menu_pub_filter') == 1)
+          echo $this->params->get('menu_pub_filter_user_description');
+      ?>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<?php } ?>
+
 <form action="<?php if($mainframe->isAdmin()) { echo 'index.php'; } else { echo $this->action; } ?>" method="post" name="adminForm"> 
   <table width="100%">
     <tr>
@@ -66,7 +85,7 @@ if($mainframe->isSite()) {
         </th>
 
         <<?php if($mainframe->isSite()) echo 'td class="sectiontableheader"'; else echo 'th'?> width="5%" nowrap>
-          <?php echo JHTML::_('grid.sort',  'Year', 'year', $this->lists['order_Dir'], $this->lists['order'] ); ?>
+          <?php echo JHTML::_('grid.sort',  'Year', 'bibyear', $this->lists['order_Dir'], $this->lists['order'] ); ?>
         </th>
 
         <? if($mainframe->isAdmin()) { ?>
@@ -131,7 +150,7 @@ if($mainframe->isSite()) {
           ?>
         </td>
         <td>
-          <?php echo $row->year; ?>
+          <?php echo $row->bibyear > 0 ? $row->bibyear : ''; ?>
         </td>
         <?php if($mainframe->isAdmin()) {?>
         <td align="center"> 
@@ -178,4 +197,10 @@ if($mainframe->isSite()) {
   <input type="hidden" name="boxchecked" value="0" /> 
   <input type="hidden" name="filter_order" value="<?php echo $this->lists['order']; ?>" />
   <input type="hidden" name="filter_order_Dir" value="<?php echo $this->lists['order_Dir']; ?>" />
-</form> 
+</form>
+
+<?php if($mainframe->isSite()) { ?>
+    </td>
+  </tr>
+</table>
+<?php } ?>

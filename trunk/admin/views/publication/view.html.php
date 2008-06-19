@@ -23,10 +23,6 @@ class PublicationsViewPublication extends JView {
     $document =& JFactory::getDocument();
     $model =& $this->getModel();
 
-    // Get the parameters of the active menu item
-    $menus=& JSite::getMenu();
-    $menu =& $menus->getActive();
-    
     $pub =& $this->get('Data');
 
     $pathway->addItem($pub->title, '');
@@ -43,7 +39,17 @@ class PublicationsViewPublication extends JView {
   }
 
   function _displayForm($tpl) {
+    global $mainframe;
 
+    if($mainframe->isSite()) {
+      // We need the itemid for frontend publication form to be able to return
+      // to "My Publicatoin Entries" view after submission. So itemid will be
+      // attached so that JView can read the menu params.
+      $menus=& JSite::getMenu();
+      $menu =& $menus->getActive();
+      $Itemid = $menu->id;
+    }
+  
     $user=& JFactory::getUser();
     // Make sure you are logged in.
     if ($user->get('id') < 1) {
@@ -73,6 +79,7 @@ class PublicationsViewPublication extends JView {
     $this->assignRef('lists',$lists);
     $this->assignRef('row', $pub);
     $this->assign('action',$uri->toString());
+    $this->assignRef('itemid',$Itemid);
     parent::display($tpl);
   }
 

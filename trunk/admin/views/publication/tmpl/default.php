@@ -4,7 +4,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="contentpaneopen">
   <tr>
     <td width="100%" class="contentheading">
-      [Title] : <?php echo $this->publication->title; ?>
+      <?php echo $this->publication->title; ?>
     </td>
   </tr>
   <tr>
@@ -19,12 +19,20 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
               printRow($key, $value);
             }
             break;
+          /*
           case 'submitted_time':
             if($value != '0000-00-00 00:00:00')
               printRow($key, JHTML::_('date',$value, '%Y-%m-%d %H:%M:%S, %Z'), 'Submitted Time');
             break;
           case 'submitted_by':
             printRow($key, $this->lists['submitted_by'], 'Submitted By');
+            break;
+          */
+          case 'id':
+          case 'entrytype':
+          case 'published':
+          case 'submitted_by':
+          case 'submitted_time':
             break;
           default:
             printRow($key, $value);
