@@ -19,6 +19,10 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
               printRow($key, $value);
             }
             break;
+          case 'url':
+            $value = "<a href=\"$value\">$value</a>";
+            printRow($key, $value);
+            break;
           /*
           case 'submitted_time':
             if($value != '0000-00-00 00:00:00')
