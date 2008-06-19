@@ -55,6 +55,15 @@ function makeTextarea($fieldName, $field) {
 }
 ?>
 
+<dl id="system-message" style="display: none">
+  <dt style="display: none">Message</dt>
+  <dd class="message message fade">
+    <ul>
+      <li id="bib_info_msg"></li>
+    </ul>
+  </dd>
+</dl>
+
 <form action="index.php" method="post"
     name="adminForm" id="adminForm">
 <div class="col width-70">
@@ -63,7 +72,9 @@ function makeTextarea($fieldName, $field) {
     <table class="admintable" id="entrytable" width="100%">
       <tr id="entrytyperow">
         <td align="right" class="key" nowrap width="140px">
-          <label for="entrytype">Entry Type:</label>
+          <span class="editlinktip hasTip" title="<?php echo JText::_(getFieldDescriptionKey('entrytype'));?>">
+            Entry Type:
+          </span>
         </td>
         <td>
           <?php echo $this->lists['entrytype']; ?>
@@ -242,7 +253,14 @@ var nonBibtexFields = {
  optional: ["abstract", "keywords", "tag1", "tag2", "tag3", "tags", "url"]
 };
 
-document.body.onload = load();
+var entrytypeMode = {
+  // Constants
+  NORMAL : 0,
+  PATENT: 1,
+  PRESENTATION : 2,
+  // Current state, initially 0
+  state : 0
+}
 
 function load() {
   var entrytypeSelect = document.getElementById('entrytype');
@@ -252,10 +270,27 @@ function load() {
 }
 
 function entrytypeChanged() {
+  document.getElementById("system-message").style.display = "none";
+
   var entrytypeSelect = document.getElementById('entrytype');
   var selectedValue = entrytypeSelect.options[entrytypeSelect.selectedIndex].value;
   var visibleRowPrefixes;
   if(selectedValue != "") {
+    // Reset the state first
+    if(entrytypeMode.state == entrytypeMode.PATENT) {
+      patentUnchosen();
+    } else if(entrytypeMode.state == entrytypeMode.PRESENTATION) {
+      presentationUnchosen();
+    }
+    // Then we start over
+    if(selectedValue == 'presentation') {
+      presentationChosen();
+      selectedValue = 'misc';
+    } else if(selectedValue == 'patent') {
+      patentChosen();
+      selectedValue = 'misc';
+    } else {
+    }
     var ruleEntry = this[selectedValue + "Entry"];
     visibleRowPrefixes = ruleEntry.required.concat(ruleEntry.optional);
   } else {
@@ -275,6 +310,75 @@ function entrytypeChanged() {
   changeRowsDisplay(visibleRowPrefixes, true);
 }
 
+
+function setInnerTextOrTextContent(elem, txt) {
+  if(document.all) {
+    elem.innerText = txt;
+  } else {
+    elem.textContent = txt;
+  }
+}
+
+function presentationChosen() {
+  var entrytypeSelect = document.getElementById('entrytype');
+  entrytypeSelect.selectedIndex = 10; // The index of misc.
+  var msgElem = document.getElementById('bib_info_msg');
+  setInnerTextOrTextContent(msgElem, "We use 'misc' entry type to store presentations. Please modify proper fields below.");
+  document.getElementById("system-message").style.display = "";
+  var elem;
+  elem = document.getElementById("howpublished");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PRESENTATION_HOWPUBLISHED_DEFAULT'); ?>" : elem.value;
+  elem = document.getElementById("tag3");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PRESENTATION_TAG3_DEFAULT'); ?>" : elem.value;
+  entrytypeMode.state = entrytypeMode.PRESENTATION;
+}
+
+function presentationUnchosen() {
+  var elem;
+  elem = document.getElementById("howpublished");
+  elem.value = (elem.value == "<?php echo JText::_('PRESENTATION_HOWPUBLISHED_DEFAULT'); ?>") ? "" : elem.value;
+  elem = document.getElementById("tag3");
+  elem.value = (elem.value == "<?php echo JText::_('PRESENTATION_TAG3_DEFAULT'); ?>") ? "" : elem.value;
+  entrytypeMode.state = entrytypeMode.NORMAL;
+}
+
+function patentChosen() {
+  var entrytypeSelect = document.getElementById('entrytype');
+  entrytypeSelect.selectedIndex = 10; // The index of misc.
+  var msgElem = document.getElementById('bib_info_msg');
+  setInnerTextOrTextContent(msgElem, "We use 'misc' entry type to store patents. Please modify proper fields below.");
+  document.getElementById("system-message").style.display = "block";
+  var elem;
+  elem = document.getElementById("author");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PATENT_AUTHOR_DEFAULT'); ?>" : elem.value;
+  elem = document.getElementById("howpublished");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PATENT_HOWPUBLISHED_DEFAULT'); ?>" : elem.value;
+  elem = document.getElementById("tag3");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PATENT_TAG3_DEFAULT'); ?>" : elem.value;
+  elem = document.getElementById("note");
+  elem.value = (elem.value == "") ? "<?php echo JText::_('PATENT_NOTE_DEFAULT'); ?>" : elem.value;
+  entrytypeMode.state = entrytypeMode.PATENT;
+}
+
+function patentUnchosen() {
+  var elem;
+  elem = document.getElementById("author");
+  if(elem.value == "<?php echo JText::_('PATENT_AUTHOR_DEFAULT'); ?>") {
+    elem.value = "";
+  }
+  elem = document.getElementById("howpublished");
+  if(elem.value == "<?php echo JText::_('PATENT_HOWPUBLISHED_DEFAULT'); ?>") {
+    elem.value = "";
+  }
+  elem = document.getElementById("tag3");
+  if(elem.value == "<?php echo JText::_('PATENT_TAG3_DEFAULT'); ?>") {
+    elem.value = "";
+  }
+  elem = document.getElementById("note");
+  elem.value = (elem.value == "<?php echo JText::_('PATENT_NOTE_DEFAULT'); ?>") ? "" : elem.value;
+  entrytypeMode.state = entrytypeMode.NORMAL;
+}
+
 function enableInputElement(elemName) {
   var checkbox = document.getElementById(elemName + "enabled");
   var inputElem = document.getElementById(elemName);
@@ -289,7 +393,7 @@ function changeRowsDisplay(visibleRowPrefixes, show) {
   for(i = 0; i < visibleRowPrefixes.length; i++) {
     tbrow = document.getElementById(visibleRowPrefixes[i] + "row");
     if(show == true) {
-      tbrow.style.display = "table-row";
+      tbrow.style.display = "";
     } else {
       tbrow.style.display = "none";
     }
@@ -314,7 +418,7 @@ function changeAllBibtexFieldsDisplay() {
     // begin at 1 so that entrytype select is not included.
     for(var i = 1; i <= lastbibindex; i++) {
       var tbrow = entryTable.rows[i];
-      tbrow.style.display = "table-row";
+      tbrow.style.display = "";
     }
   } else {
     entrytypeChanged();
@@ -341,4 +445,6 @@ function submitbutton(pressbutton) {
   submitform( pressbutton );
 }
 
+//document.body.onload = load();  //IE: htmlfile Not implemented
+document.onload = load();
 </script>

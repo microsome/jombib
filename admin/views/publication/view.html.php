@@ -119,7 +119,12 @@ class PublicationsViewPublication extends JView {
       '11' => array('value' => 'phdthesis', 'text' => 'Phdthesis'),
       '12' => array('value' => 'proceedings', 'text' => 'Proceedings'),
       '13' => array('value' => 'techreport', 'text' => 'TechReport'),
-      '14' => array('value' => 'unpublished', 'text' => 'Unpublished')       
+      '14' => array('value' => 'unpublished', 'text' => 'Unpublished'),
+      // The following two are not real entry type defined in the database.
+      // If chosen by the user, some javascript is executed to show a standard
+      // entrytype.
+      '15' => array('value' => 'presentation', 'text' => 'Presentation'),
+      '16' => array('value' => 'patent', 'text' => 'Patent')
     );
     return $entrytype;
   }
