@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <params>
+    <param name="author_display_format" type="text" default="FIRST VON LAST JR" label="Author Name Display Format" description="The format string used to display author names. Use FIRST,LAST,VON,JR (case-sensitive) in the format string" />
+  </params>
+</config>
