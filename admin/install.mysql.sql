@@ -48,3 +48,11 @@ CREATE TABLE IF NOT EXISTS `#__publications` (
       REFERENCES `#__users` (`id`)
       ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=MyISAM CHARACTER SET `utf8`;
+
+DROP TABLE IF EXISTS `#__publications_bibtex`;
+CREATE TABLE IF NOT EXISTS `#__publications_bibtex` (
+  `id` int(11) NOT NULL auto_increment,
+  `bibtex` text,  -- The content of the bibtex file
+  `pubids` varchar(255),  -- The IDs of #__publications records that this bibtex file generates
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM CHARACTER SET `utf8`;

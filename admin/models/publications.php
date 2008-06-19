@@ -72,8 +72,11 @@ class PublicationsModelPublications extends JModel {
   function _buildContentOrderBy() {
     global $mainframe, $option;
 
-    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title','cmd' );
-    $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
+    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','bibyear' );
+    $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','desc','word' );
+
+//     $filter_order   = JFilterInput::clean($filter_order, 'cmd');
+//     $filter_order_dir = JFilterInput::clean($filter_order_dir, 'word');
 
     //take special care to journalbooktile filter
     if($filter_order == 'journalbooktile'){
@@ -98,14 +101,15 @@ class PublicationsModelPublications extends JModel {
 
     // Add filters only for front site view
     if($mainframe->isSite()) {
-      // only show published items on front-end.
-      $filter_state = 'P';
       // This param comes from the menu params and was set in view.html.php
       $menu_filter = $mainframe->getUserState('menu_pub_filter');
       if(intval($menu_filter) == 1) {
         // Show only the publications submitted by the current user.
         $user =& JFactory::getUser();
         $where[] = 'submitted_by = ' . $user->id;
+      } else {
+        // only show published items on front-end.
+        $filter_state = 'P';
       }
     }
     
@@ -140,6 +144,18 @@ class PublicationsModelPublications extends JModel {
       $tags = $db->loadObjectList();
     }
     return $tags;
+  }
+
+
+  function storeBibtexContent($data) {
+    $db =& JFactory::getDBO();
+    $bibtex = $data['bibtex'];
+    $pubids = $data['pubids'];
+    $query = 'INSERT INTO #__publications_bibtex (bibtex, pubids)'
+      . " VALUES (" . $db->Quote($bibtex) . ","
+      . $db->Quote($pubids) . ')';
+    $db->setQuery( $query );
+    $db->query();
   }
 }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="Publications BibTeX Form Layout">
+    <message>
+      <![CDATA[This layout shows a form to submit publications as BibTeX file content. ]]>
+    </message>
+  </layout>
+</metadata>

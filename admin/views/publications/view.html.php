@@ -8,18 +8,23 @@ class PublicationsViewPublications extends JView {
   function display($tpl = null) {
     global $mainframe, $option;
 
-    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','title');
-    $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','','word' );
+    $filter_order= $mainframe->getUserStateFromRequest( $option.'filter_order','filter_order','bibyear');
+    $filter_order_Dir= $mainframe->getUserStateFromRequest( $option.'filter_order_Dir','filter_order_Dir','desc','word' );
     $filter_state= $mainframe->getUserStateFromRequest( $option.'filter_state','filter_state','','word' );
     $filter_tag1= $mainframe->getUserStateFromRequest( $option.'filter_tag1','filter_tag1','');
     $uri = &JFactory::getURI();
 
     // Get the page/component configuration
     if($mainframe->isSite()) {
-      $params = &$mainframe->getParams();
+      //$params = &$mainframe->getParams();
+      $params = &JComponentHelper::getParams( 'com_publications' );
       $filter_from_menu_params = $params->get('menu_pub_filter', 0);
       $mainframe->setUserState('menu_pub_filter', $filter_from_menu_params);
     } else {
+    }
+
+    if($mainframe->getCfg('debug')) {
+      print_r($params);
     }
 
     // Get data from the model

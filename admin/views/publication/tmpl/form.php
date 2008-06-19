@@ -329,6 +329,7 @@ function submitbutton(pressbutton) {
   if (pressbutton == 'cancel') {
     //added for frontend
     form.view = "publications";
+    form.action = form.action + <?php echo ($mainframe->isSite() && intval($this->row->id) > 0 ? '"?Itemid=' . $this->itemid . '"' : '""') ?>;
     submitform( pressbutton );
     return;
   }

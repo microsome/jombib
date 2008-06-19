@@ -45,8 +45,8 @@ class PublicationsModelPublication extends JModel {
   function _initData() {
     // Lets load the content if it doesn't already exist
     if (empty($this->_data)) {
-      $weblink = new stdClass();
-      $this->_data= $weblink;
+      $pub = new stdClass();
+      $this->_data= $pub;
       return (boolean) $this->_data;
     }
     return true;

@@ -2,6 +2,7 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 jimport( 'joomla.application.component.controller' );
+require_once (JPATH_COMPONENT.DS.'helpers'.DS.'bibtex.php');
 
 class PublicationsController extends JController {
   
@@ -23,6 +24,25 @@ class PublicationsController extends JController {
       JRequest::setVar('view', 'publications' );
     }
     parent::display();
+  }
+
+
+  function saveBibtex() {
+    global $option;
+    $post = JRequest::get('post');
+    $bibtex = new PublicationsHelperBibTeX();
+    $bibtex->loadBibtex($post['bibtex']);
+    // convert and store
+    $pub_arr = $bibtex->toPubArray(true);
+    foreach($pub_arr as $pub) {
+      $pubids .= $pub->id . ',';
+    }
+    $model = $this->getModel('Publications');
+    $model->storeBibtexContent(array('bibtex' => $post['bibtex'],
+      'pubids' => $pubids));
+    $msg = 'Publications Saved.';
+    $link = 'index.php?option=' . $option;
+    $this->setRedirect($link, $msg);
   }
 
   function save() { 
