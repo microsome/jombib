@@ -1,6 +1,7 @@
 <?php defined('_JEXEC') or die('Restricted access'); ?>
 
 <?php JHTML::_('behavior.tooltip'); ?>
+<?php JHTMLBehavior::formvalidation(); ?>
 
 <?php
 function createFieldRow($fieldName, $field, $inputElem, $fieldLabel = "") {
@@ -41,10 +42,10 @@ function getFieldDescriptionKey($fieldName) {
   return $key;
 }
 
-function makeTextInput($fieldName, $field) {
-  $textinput = '<input class="text_area" type="text" name="' . $fieldName . '" '
+function makeTextInput($fieldName, $field, $additionalAttr='') {
+  $textinput = '<input type="text" name="' . $fieldName . '" '
       . 'id="' . $fieldName . '" style="width: 100%" maxlength="250" '
-      . 'value="'. $field. '"';
+      . 'value="'. $field. '" ' . $additionalAttr . ' />';
   return $textinput;
 }
 
@@ -65,7 +66,7 @@ function makeTextarea($fieldName, $field) {
 </dl>
 
 <form action="index.php" method="post"
-    name="adminForm" id="adminForm">
+    name="adminForm" id="adminForm" class="form-validate">
 <div class="col width-70">
   <fieldset class="adminform">
     <legend>Details</legend>
@@ -80,7 +81,7 @@ function makeTextarea($fieldName, $field) {
           <?php echo $this->lists['entrytype']; ?>
         </td>                
       </tr>
-      <?php createFieldRow('title',$this->row->title, makeTextInput('title', $this->row->title)); ?>
+      <?php createFieldRow('title',$this->row->title, makeTextInput('title', $this->row->title, 'class="required"')); ?>
       <!-- alphabetic order bibtex fields  -->
       <?php createFieldRow('address',$this->row->address, makeTextInput('address', $this->row->address)); ?>      
       <?php createFieldRow('annote',$this->row->annote, makeTextInput('annote', $this->row->annote)); ?>
@@ -442,7 +443,13 @@ function submitbutton(pressbutton) {
     //new
   } else {
   }
-  submitform( pressbutton );
+
+  if (document.formvalidator.isValid(form)) {
+    submitform( pressbutton );
+  } else {
+    alert("Some values are not acceptable.  Please retry.");
+    return;
+  }
 }
 
 //document.body.onload = load();  //IE: htmlfile Not implemented
