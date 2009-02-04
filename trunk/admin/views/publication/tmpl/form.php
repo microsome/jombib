@@ -54,6 +54,12 @@ function makeTextarea($fieldName, $field) {
       . $fieldName . '" id="' . $fieldName . '">' . $field . '</textarea>';
   return $textarea;
 }
+
+function makeComboBox($fieldName, $field, $selElem) {
+  $textinput = makeTextInput($fieldName, $field);
+  return '<table width="100%"><tr><td>' . $selElem . '</td><td width="100%"> ' . $textinput . '</td></tr></table>';
+}
+
 ?>
 
 <dl id="system-message" style="display: none">
@@ -109,7 +115,7 @@ function makeTextarea($fieldName, $field) {
       <?php createFieldRow('abstract',$this->row->abstract, makeTextarea('abstract', $this->row->abstract)); ?>
       <!-- other data fields  -->
       <?php createFieldRow('keywords',$this->row->keywords, makeTextInput('keywords', $this->row->keywords)); ?>
-      <?php createFieldRow('tag1',$this->row->tag1, makeTextInput('tag1', $this->row->tag1), 'Tag 1'); ?>
+      <?php createFieldRow('tag1',$this->row->tag1, makeComboBox('tag1', $this->row->tag1, $this->lists['tag1sel']), 'Tag 1'); ?>
       <?php createFieldRow('tag2',$this->row->tag2, makeTextInput('tag2', $this->row->tag2), 'Tag 2'); ?>
       <?php createFieldRow('tag3',$this->row->tag3, makeTextInput('tag3', $this->row->tag3), 'Tag 3'); ?>
       <?php createFieldRow('tags',$this->row->tags, makeTextInput('tags', $this->row->tags), 'Other Tags'); ?>
@@ -268,6 +274,18 @@ function load() {
   entrytypeSelect.selectedIndex = 1;
   entrytypeChanged();
   changeNonBibtexFieldsDisplay();
+}
+
+/**
+ * Change the value of the text input to the value selected in the drop-down list.
+ */
+function selectInComboChanged(elemId) {
+  // The elemId should fieldName"sel"
+  var changedSelect = document.getElementById(elemId);
+  var selectedValue = changedSelect.options[changedSelect.selectedIndex].value;
+  // Trims the last 3 characters "sel"
+  var inputId = elemId.substr(0, elemId.length - 3);
+  document.getElementById(inputId).value = selectedValue;
 }
 
 function entrytypeChanged() {

@@ -69,6 +69,13 @@ class PublicationsViewPublication extends JView {
         array ('value'=>'', 'text'=>'-- Select Year  --'), '', $pub->bibyear);
     $lists['published'] = JHTML::_('select.booleanlist', 'published', 'class="inputbox"', 
         $pub->published);
+    // Make the combo box for tags
+    $javascript_combo = 'onchange="selectInComboChanged(this.id)"';
+    require_once(JPATH_COMPONENT.DS.'models'.DS.'publications.php');	
+    $lists['tag1sel'] = JHTML::_('select.genericlist', PublicationsModelPublications::getTag1(false),
+                              'tag1sel', 'class="inputbox" '. $javascript_combo,
+                              'value', 'text', 0);
+
     if(intval($pub->submitted_by) > 0) {
       //not new
       $submittedBy =& JUser::getInstance($pub->submitted_by);
