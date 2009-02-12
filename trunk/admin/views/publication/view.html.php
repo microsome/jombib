@@ -73,7 +73,7 @@ class PublicationsViewPublication extends JView {
     $javascript_combo = 'onchange="selectInComboChanged(this.id)"';
     require_once(JPATH_COMPONENT.DS.'models'.DS.'publications.php');	
     $lists['tag1sel'] = JHTML::_('select.genericlist', PublicationsModelPublications::getTag1(false),
-                              'tag1sel', 'class="inputbox" '. $javascript_combo,
+                              'tag1sel', 'class="inputbox" '. $javascript_combo . ' style="width: 150px"',
                               'value', 'text', 0);
 
     if(intval($pub->submitted_by) > 0) {
