@@ -1,0 +1,1 @@
+This component helps create bibliography database based on Joomla!.
